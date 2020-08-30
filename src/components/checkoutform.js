@@ -8,6 +8,7 @@ import {CardElement, useElements, useStripe} from "@stripe/react-stripe-js"
 import CheckoutField from './checkoutfield';
 import useForm from './useForm';
 
+
 const cardElementOptions = {
     style: {
       base:{
@@ -44,11 +45,10 @@ function CheckoutForm() {
     const stripe = useStripe();
     const elements = useElements();
 
-    const [secretQuery, {loading, data}] = useLazyQuery(SECRET_QUERY, {variables: {amount: 50000}, onCompleted: async () => {
+    const [secretQuery, {loading, data}] = useLazyQuery(SECRET_QUERY, {variables: {amount: 50000}, onCompleted: async (ev) => {
         console.log(data.badMagicStripeClientSecret)
         const cardElement = elements.getElement(CardElement);
         console.log(cardElement);
-
         const billingDetails = {
             name: values.billingName,
             email: values.email,
@@ -57,6 +57,16 @@ function CheckoutForm() {
                 line1: values.billingAddress,
                 state: values.billingState,
                 postal_code: values.billingZip
+            }
+        }
+
+        const shippingDetails = {
+            name: values.shippingName,
+            address: {
+                city: values.shippingCity,
+                line1: values.shippingAddress,
+                state: values.shippingState,
+                postal_code: values.shippingZip
             }
         }
 
@@ -79,18 +89,8 @@ function CheckoutForm() {
     function tryPayment(){
         console.log(values);
         setProcessingTo(true);
-        const shippingDetails = {
-            name: values.shippingName,
-            address: {
-                city: values.shippingCity,
-                line1: values.shippingAddress,
-                state: values.shippingState,
-                postal_code: values.shippingZip
-            }
-        }
-
+        
         secretQuery()
-
     }
 
 
@@ -128,6 +128,7 @@ function CheckoutForm() {
                         <CardElement options={cardElementOptions}></CardElement>
                     </Container>
                 </Row>
+                
                 <Button variant="primary" type="submit">
                     Submit
                 </Button>

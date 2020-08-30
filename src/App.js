@@ -3,11 +3,13 @@ import { Container, Col, Row, ListGroup, Accordion, Button } from 'react-bootstr
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Menu  from './components/menu';
-import CheckoutForm from './components/checkoutform';
+
 import './App.css';
-import {Elements, CardElement, ElementsConsumer} from '@stripe/react-stripe-js';
+
 import {loadStripe} from '@stripe/stripe-js';
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache} from '@apollo/client';
+import { CartContext, ItemContext } from './components/appContext';
+import Cart from './components/cart';
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
@@ -22,44 +24,39 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <div className="App">
-        <Container>
-          <Row>
-            <Col>
-              <Menu></Menu>
-            </Col>
-            <Col>
-              <Row>
-                Bad Magic
-              
-                Display of items
-              </Row>
-              <Row>
-                <Col>
-                  <Button>Menu</Button>
-                </Col>
-                <Col>
-                </Col>
-                <Col>
-                  <Button>Cart</Button>
-                </Col>
-              </Row>
-            </Col>
-            <Col>
+      <CartContext.Provider value="test">
+        <div className="App">
+          <Container>
             <Row>
-                Cart
+              <ItemContext.Provider value="new releases">
+              <Col>
+                <Menu></Menu>
+              </Col>
+              <Col>
+                <Row>
+                  Bad Magic
+                
+                  Display of items
+                </Row>
+                <Row>
+                  <Col>
+                    <Button>Menu</Button>
+                  </Col>
+                  <Col>
+                  </Col>
+                  <Col>
+                    <Button>Cart</Button>
+                  </Col>
+                </Row>
+              </Col>
+              </ItemContext.Provider>
+              <Col>
+                <Cart options={stripePromise}></Cart>
+              </Col>
             </Row>
-            <Row>       
-              items
-            </Row>
-              <Elements stripe={stripePromise}>
-                <CheckoutForm></CheckoutForm>
-
-              </Elements>
-            </Col>
-          </Row>
-        </Container>
-      </div>
+          </Container>
+        </div>
+      </CartContext.Provider>
     </ApolloProvider>
   );
 }
