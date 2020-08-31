@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Col, Row, ListGroup, Accordion, Button } from 'react-bootstrap';
+import { Container, Col, Row,  Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Menu  from './components/menu';
@@ -10,6 +10,7 @@ import {loadStripe} from '@stripe/stripe-js';
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache} from '@apollo/client';
 import { CartContext, ItemContext } from './components/appContext';
 import Cart from './components/cart';
+import Shop from './components/shop';
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
@@ -33,21 +34,7 @@ function App() {
                 <Menu></Menu>
               </Col>
               <Col>
-                <Row>
-                  Bad Magic
-                
-                  Display of items
-                </Row>
-                <Row>
-                  <Col>
-                    <Button>Menu</Button>
-                  </Col>
-                  <Col>
-                  </Col>
-                  <Col>
-                    <Button>Cart</Button>
-                  </Col>
-                </Row>
+                <Shop></Shop>
               </Col>
               </ItemContext.Provider>
               <Col>
